@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кыргыз алфавити - Сабак</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #c0392b;
+            --accent-color: #ffd700;
+            --text-color: #2c3e50;
+            --light-bg: #fff5f5;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        .back-button::before {
+            content: '←';
+            margin-right: 0.5rem;
+        }
+
+        .lesson-progress {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .letter-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .letter-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .letter-card.active {
+            background-color: var(--light-bg);
+            border: 2px solid var(--primary-color);
+        }
+
+        .letter {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .pronunciation {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .examples {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .letter-card:hover .examples {
+            display: block;
+        }
+
+        .exercise-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .exercise {
+            background-color: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .exercise h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .exercise input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .exercise input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .result-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .correct-answer {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .wrong-answer {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .practice-mode {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 100;
+            min-width: 300px;
+        }
+
+        .practice-mode h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .practice-mode .practice-content {
+            display: none;
+            text-align: center;
+        }
+
+        .practice-mode.active .practice-content {
+            display: block;
+        }
+
+        .practice-mode .letter-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 1rem 0;
+            min-height: 4rem;
+        }
+
+        .practice-mode .practice-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .practice-mode .practice-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .practice-mode .practice-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .practice-mode .practice-result {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .practice-mode .practice-stats {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .alphabet-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .letter {
+                font-size: 2rem;
+            }
+
+            .practice-mode {
+                position: static;
+                margin-top: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Кыргыз алфавити</h1>
+        <p>Тамгалар жана тыбыштар</p>
+    </header>
+
+    <div class="container">
+        <a href="../index.html" class="back-button">Башкы бетке кайтуу</a>
+
+        <div class="lesson-progress">
+            <h3>Сабактын прогресси</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">0% бүтүрүлдү</p>
+        </div>
+
+        <div class="alphabet-grid" id="alphabetGrid">
+            <!-- Буквы будут добавлены через JavaScript -->
+        </div>
+
+        <div class="exercise-section">
+            <h2>Көнүгүүлөр</h2>
+            
+            <div class="exercise">
+                <h3>Тамгаларды табуу</h3>
+                <p>Төмөнкү сөздөрдүн ичиндеги тамгаларды табыңыз:</p>
+                <div class="exercise-item">
+                    <p>Кыргызстан - <input type="text" id="exercise1" placeholder="Тамгаларды жазыңыз"></p>
+                    <button onclick="checkAnswer('exercise1', 'Кыргызстан')">Текшерүү</button>
+                    <div id="exercise1-result" class="result-message"></div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Тамгаларды угуу</h3>
+                <p>Төмөнкү тамгалардын атын жазыңыз:</p>
+                <div class="exercise-item">
+                    <p>Ң - <input type="text" id="exercise2" placeholder="Тамганын атын жазыңыз"></p>
+                    <button onclick="checkAnswer('exercise2', 'ң')">Текшерүү</button>
+                    <div id="exercise2-result" class="result-message"></div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Сөздөрдү жазуу</h3>
+                <p>Төмөнкү сөздөрдү кыргызча жазыңыз:</p>
+                <div class="exercise-item">
+                    <p>Бишкек - <input type="text" id="exercise3" placeholder="Сөздү жазыңыз"></p>
+                    <button onclick="checkAnswer('exercise3', 'Бишкек')">Текшерүү</button>
+                    <div id="exercise3-result" class="result-message"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="practice-mode">
+            <h3>Көнүгүү режими</h3>
+            <button onclick="startPractice()" id="startPracticeBtn">Көнүгүүнү баштоо</button>
+            <div class="practice-content">
+                <div class="letter-display" id="practiceLetter"></div>
+                <input type="text" class="practice-input" id="practiceInput" placeholder="Тамганын атын жазыңыз" onkeypress="handlePracticeInput(event)">
+                <div class="practice-buttons">
+                    <button onclick="checkPracticeAnswer()">Текшерүү</button>
+                    <button onclick="skipLetter()">Өткөрүп жиберүү</button>
+                </div>
+                <div class="practice-result" id="practiceResult"></div>
+                <div class="practice-stats">
+                    Туура: <span id="correctCount">0</span> | 
+                    Туура эмес: <span id="wrongCount">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Данные алфавита
+        const alphabet = [
+            { letter: 'А а', pronunciation: '[а]', examples: 'Алма, Ата' },
+            { letter: 'Б б', pronunciation: '[б]', examples: 'Бак, Бала' },
+            { letter: 'В в', pronunciation: '[в]', examples: 'Вагон, Вокзал' },
+            { letter: 'Г г', pronunciation: '[г]', examples: 'Гүл, Газ' },
+            { letter: 'Д д', pronunciation: '[д]', examples: 'Дос, Дүкөн' },
+            { letter: 'Е е', pronunciation: '[е]', examples: 'Ел, Ер' },
+            { letter: 'Ё ё', pronunciation: '[ё]', examples: 'Ёлка, Ёргө' },
+            { letter: 'Ж ж', pronunciation: '[ж]', examples: 'Жыл, Жер' },
+            { letter: 'З з', pronunciation: '[з]', examples: 'Зам, Зер' },
+            { letter: 'И и', pronunciation: '[и]', examples: 'Ил, Ит' },
+            { letter: 'Й й', pronunciation: '[й]', examples: 'Ай, Той' },
+            { letter: 'К к', pronunciation: '[к]', examples: 'Күн, Көл' },
+            { letter: 'Л л', pronunciation: '[л]', examples: 'Лап, Лак' },
+            { letter: 'М м', pronunciation: '[м]', examples: 'Мал, Мекен' },
+            { letter: 'Н н', pronunciation: '[н]', examples: 'Нан, Нур' },
+            { letter: 'Ң ң', pronunciation: '[ң]', examples: 'Таң, Тоң' },
+            { letter: 'О о', pronunciation: '[о]', examples: 'Ооз, Ой' },
+            { letter: 'Ө ө', pronunciation: '[ө]', examples: 'Өз, Өмүр' },
+            { letter: 'П п', pronunciation: '[п]', examples: 'Пар, Пай' },
+            { letter: 'Р р', pronunciation: '[р]', examples: 'Рак, Рак' },
+            { letter: 'С с', pronunciation: '[с]', examples: 'Сан, Сүт' },
+            { letter: 'Т т', pronunciation: '[т]', examples: 'Таш, Түн' },
+            { letter: 'У у', pronunciation: '[у]', examples: 'Уй, Ун' },
+            { letter: 'Ү ү', pronunciation: '[ү]', examples: 'Үй, Үн' },
+            { letter: 'Ф ф', pronunciation: '[ф]', examples: 'Факультет, Фото' },
+            { letter: 'Х х', pronunciation: '[х]', examples: 'Хан, Хал' },
+            { letter: 'Ц ц', pronunciation: '[ц]', examples: 'Цирк, Цемент' },
+            { letter: 'Ч ч', pronunciation: '[ч]', examples: 'Чак, Чай' },
+            { letter: 'Ш ш', pronunciation: '[ш]', examples: 'Шар, Шай' },
+            { letter: 'Щ щ', pronunciation: '[щ]', examples: 'Щетка, Щука' },
+            { letter: 'Ъ ъ', pronunciation: '[ъ]', examples: 'Объект, Субъект' },
+            { letter: 'Ы ы', pronunciation: '[ы]', examples: 'Ынтымак, Ыр' },
+            { letter: 'Ь ь', pronunciation: '[ь]', examples: 'Мель, Пальто' },
+            { letter: 'Э э', pronunciation: '[э]', examples: 'Эл, Эм' },
+            { letter: 'Ю ю', pronunciation: '[ю]', examples: 'Юл, Юрта' },
+            { letter: 'Я я', pronunciation: '[я]', examples: 'Яш, Ял' }
+        ];
+
+        // Заполнение сетки алфавита
+        function populateAlphabet() {
+            const grid = document.getElementById('alphabetGrid');
+            alphabet.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'letter-card';
+                card.innerHTML = `
+                    <div class="letter">${item.letter}</div>
+                    <div class="pronunciation">${item.pronunciation}</div>
+                    <div class="examples">${item.examples}</div>
+                `;
+                card.addEventListener('click', () => toggleLetter(card));
+                grid.appendChild(card);
+            });
+        }
+
+        // Переключение активной буквы
+        function toggleLetter(card) {
+            card.classList.toggle('active');
+            updateProgress(1);
+        }
+
+        // Обновление прогресса
+        let progress = 0;
+        function updateProgress(value) {
+            progress = Math.min(progress + value, 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = progress + '% бүтүрүлдү';
+            localStorage.setItem('alphabetProgress', progress);
+        }
+
+        // Загрузка прогресса при загрузке страницы
+        window.onload = function() {
+            populateAlphabet();
+            const savedProgress = localStorage.getItem('alphabetProgress');
+            if (savedProgress) {
+                progress = parseInt(savedProgress);
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('progressText').textContent = progress + '% бүтүрүлдү';
+            }
+        }
+
+        // Проверка ответов
+        function checkAnswer(exerciseId, correctAnswer) {
+            const input = document.getElementById(exerciseId);
+            const resultDiv = document.getElementById(exerciseId + '-result');
+            const userAnswer = input.value.trim();
+
+            resultDiv.style.display = 'block';
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                resultDiv.textContent = 'Туура! Азаматсыз!';
+                resultDiv.className = 'result-message correct-answer';
+                updateProgress(5);
+            } else {
+                resultDiv.textContent = 'Туура эмес. Кайра аракет кылыңыз.';
+                resultDiv.className = 'result-message wrong-answer';
+            }
+        }
+
+        // Режим практики
+        let practiceMode = {
+            active: false,
+            currentLetter: null,
+            correctAnswers: 0,
+            wrongAnswers: 0,
+            usedLetters: new Set()
+        };
+
+        function startPractice() {
+            practiceMode.active = true;
+            practiceMode.usedLetters.clear();
+            practiceMode.correctAnswers = 0;
+            practiceMode.wrongAnswers = 0;
+            updatePracticeStats();
+            
+            document.getElementById('startPracticeBtn').style.display = 'none';
+            document.querySelector('.practice-mode').classList.add('active');
+            document.querySelector('.practice-content').style.display = 'block';
+            
+            nextPracticeLetter();
+        }
+
+        function nextPracticeLetter() {
+            // Находим букву, которая еще не использовалась
+            let availableLetters = alphabet.filter(letter => !practiceMode.usedLetters.has(letter.letter));
+            
+            if (availableLetters.length === 0) {
+                // Если все буквы использованы, сбрасываем статистику
+                practiceMode.usedLetters.clear();
+                availableLetters = alphabet;
+            }
+            
+            practiceMode.currentLetter = availableLetters[Math.floor(Math.random() * availableLetters.length)];
+            practiceMode.usedLetters.add(practiceMode.currentLetter.letter);
+            
+            document.getElementById('practiceLetter').textContent = practiceMode.currentLetter.letter;
+            document.getElementById('practiceInput').value = '';
+            document.getElementById('practiceResult').style.display = 'none';
+            document.getElementById('practiceInput').focus();
+        }
+
+        function handlePracticeInput(event) {
+            if (event.key === 'Enter') {
+                checkPracticeAnswer();
+            }
+        }
+
+        function checkPracticeAnswer() {
+            const userAnswer = document.getElementById('practiceInput').value.trim().toLowerCase();
+            const correctAnswer = practiceMode.currentLetter.letter.split(' ')[1].toLowerCase();
+            const resultDiv = document.getElementById('practiceResult');
+            
+            resultDiv.style.display = 'block';
+            
+            if (userAnswer === correctAnswer) {
+                resultDiv.textContent = 'Туура! Азаматсыз!';
+                resultDiv.className = 'practice-result correct-answer';
+                practiceMode.correctAnswers++;
+                updateProgress(2);
+            } else {
+                resultDiv.textContent = `Туура эмес. Туура жооп: ${correctAnswer}`;
+                resultDiv.className = 'practice-result wrong-answer';
+                practiceMode.wrongAnswers++;
+            }
+            
+            updatePracticeStats();
+            
+            // Переходим к следующей букве через 1.5 секунды
+            setTimeout(nextPracticeLetter, 1500);
+        }
+
+        function skipLetter() {
+            const resultDiv = document.getElementById('practiceResult');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = `Өткөрүлдү. Туура жооп: ${practiceMode.currentLetter.letter.split(' ')[1]}`;
+            resultDiv.className = 'practice-result wrong-answer';
+            practiceMode.wrongAnswers++;
+            updatePracticeStats();
+            
+            setTimeout(nextPracticeLetter, 1500);
+        }
+
+        function updatePracticeStats() {
+            document.getElementById('correctCount').textContent = practiceMode.correctAnswers;
+            document.getElementById('wrongCount').textContent = practiceMode.wrongAnswers;
+        }
+    </script>
+</body>
+</html> 

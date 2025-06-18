@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ky">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Кыргыз тили - Интерактивдик окуу платформасы</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Кыргыз тили</h1>
+      <p>Интерактивдик окуу платформасы</p>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="#home">Башкы бет</a></li>
+        <li><a href="#lessons">Сабактар</a></li>
+        <li><a href="#exercises">Көнүгүүлөр</a></li>
+        <li><a href="#dictionary">Сөздүк</a></li>
+        <li><a href="#testimonials">Окуучулардын пикирлери</a></li>
+        <li><a href="#progress">Прогресс</a></li>
+        <li><a id="aboutBtn">Мен жөнүндө</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <section id="home" class="hero-section">
+        <h2>Кош келиңиздер!</h2>
+        <p>
+          Кыргыз тилин үйрөнүү үчүн интерактивдик платформабызга кош келиңиздер!
+        </p>
+        <div class="progress-section">
+          <h3>Сиздин прогрессиңиз</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <p id="progressText">0% бүтүрүлдү</p>
+        </div>
+      </section>
+
+      <section id="lessons">
+        <h2>Сабактар</h2>
+        <div class="lesson-grid">
+          <div class="lesson-card">
+            <h3>Тамгалар жана тыбыштар</h3>
+            <p>Кыргыз алфавитин үйрөнүү</p>
+            <a href="lessons/alphabet.html"
+              ><button onclick="updateProgress(10)">Баштоо</button></a
+            >
+          </div>
+          <div class="lesson-card">
+            <h3>Сөздөр жана сүйлөмдөр</h3>
+            <p>Негизги сөздөрдү үйрөнүү</p>
+            <a href="lessons/words.html"
+              ><button onclick="updateProgress(10)">Баштоо</button></a
+            >
+          </div>
+          <div class="lesson-card">
+            <h3>Грамматика</h3>
+            <p>Грамматикалык эрежелер</p>
+            <button onclick="showComingSoon()">Жакында</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="testimonials" class="testimonials-section">
+        <h2>Окуучулардын пикирлери</h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <p>
+              "Бул платформа кыргыз тилин үйрөнүүдө чоң жардам. Интерактивдик
+              көнүгүүлөр жана сабактар өтө пайдалуу."
+            </p>
+            <div class="student-info">
+              <div class="student-avatar">АК</div>
+              <div>
+                <h4>Айгерим К.</h4>
+                <p>КМУ, 3-курс</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p>
+              "Сайттын дизайны жана функционалдуулугу өтө жакшы. Кыргыз тилин
+              үйрөнүү кызыктуу болуп калды."
+            </p>
+            <div class="student-info">
+              <div class="student-avatar">БМ</div>
+              <div>
+                <h4>Бакыт М.</h4>
+                <p>БГУ, 2-курс</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p>
+              "Көнүгүүлөр жана сөздүк бөлүмдөрү өтө пайдалуу. Кыргыз тилин
+              үйрөнүүдө чоң жардам."
+            </p>
+            <div class="student-info">
+              <div class="student-avatar">СА</div>
+              <div>
+                <h4>Салтанат А.</h4>
+                <p>КНУ, 4-курс</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="exercises" class="exercise-section">
+        <h2>Интерактивдик көнүгүүлөр</h2>
+        <div class="exercise-container">
+          <div class="exercise">
+            <h3>Сөздөрдү которуу</h3>
+            <p>Төмөнкү сөздөрдү кыргызчага которуңуз:</p>
+            <div class="exercise-item">
+              <p>
+                Здравствуйте -
+                <input
+                  type="text"
+                  id="exercise1"
+                  placeholder="Жообуңузду жазыңыз"
+                />
+              </p>
+              <button onclick="checkAnswer('exercise1', 'Саламатсызбы')">
+                Текшерүү
+              </button>
+              <div id="exercise1-result" class="result-message"></div>
+            </div>
+            <!-- Добавьте больше упражнений здесь -->
+          </div>
+        </div>
+      </section>
+
+      <section id="dictionary" class="dictionary-section">
+        <h2>Сөздүк</h2>
+        <div class="dictionary-search">
+          <input type="text" id="searchInput" placeholder="Сөздү издөө..." />
+        </div>
+        <div class="dictionary-content" id="dictionaryContent">
+          <!-- Словарь будет заполнен через JavaScript -->
+        </div>
+      </section>
+
+      <!-- Добавляем новую секцию с галереей -->
+      <section id="gallery" class="container">
+        <h2>Кыргызстандын сүрөттөрү</h2>
+        <div class="image-gallery">
+          <div class="gallery-item">
+            <img src="фото-1.jpg" alt="Кыргызстандын тоолору" />
+            <div class="gallery-caption">Кыргызстандын тоолору</div>
+          </div>
+          <div class="gallery-item">
+            <img src="фото-2.jpg" alt="Ысык-Көл" />
+            <div class="gallery-caption">Ысык-Көл</div>
+          </div>
+          <div class="gallery-item">
+            <img src="фото-3.png" alt="Бишкек шаары" />
+            <div class="gallery-caption">Бишкек шаары</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Добавляем новые интерактивные упражнения -->
+      <section id="interactive-exercises" class="container">
+        <h2>Интерактивдик көнүгүүлөр</h2>
+
+        <!-- Упражнение на сопоставление -->
+        <div class="interactive-exercise">
+          <h3>Сөздөрдү туура жайгаштырыңыз</h3>
+          <p>Сүрөттөрдү аларга туура келген сөздөр менен байланыштырыңыз:</p>
+          <div class="matching-exercise" id="matchingExercise">
+            <div class="matching-item" data-word="Алма">🍎</div>
+            <div class="matching-item" data-word="Алма">Алма</div>
+            <div class="matching-item" data-word="Үй">🏠</div>
+            <div class="matching-item" data-word="Үй">Үй</div>
+            <div class="matching-item" data-word="Күн">☀️</div>
+            <div class="matching-item" data-word="Күн">Күн</div>
+          </div>
+        </div>
+
+        <!-- Упражнение на перетаскивание -->
+        <div class="interactive-exercise">
+          <h3>Сөздөрдү туура жайгаштырыңыз</h3>
+          <p>Сөздөрдү туура категорияга сүйрөп таштаңыз:</p>
+          <div class="drag-drop-area">
+            <div
+              class="draggable-item"
+              draggable="true"
+              data-category="Жаныбарлар"
+            >
+              Ат
+            </div>
+            <div
+              class="draggable-item"
+              draggable="true"
+              data-category="Жаныбарлар"
+            >
+              Кой
+            </div>
+            <div class="draggable-item" draggable="true" data-category="Тамак">
+              Бешбармак
+            </div>
+            <div class="draggable-item" draggable="true" data-category="Тамак">
+              Куурдак
+            </div>
+          </div>
+          <div class="drop-zone" data-category="Жаныбарлар">
+            <p>Жаныбарлар</p>
+          </div>
+          <div class="drop-zone" data-category="Тамак">
+            <p>Тамак</p>
+          </div>
+        </div>
+
+        <!-- Аудио упражнение -->
+        <div class="interactive-exercise">
+          <h3>Сөздөрдү угуп, жазыңыз</h3>
+          <p>Төмөнкү сөздөрдү угуп, аларды жазыңыз:</p>
+          <div class="audio-exercise">
+            <button class="audio-button" onclick="playAudio('salam')">
+              🔊 Угуу
+            </button>
+            <input
+              type="text"
+              id="audioInput"
+              placeholder="Сөздү жазыңыз"
+              class="exercise-input"
+            />
+            <button onclick="checkAudioAnswer('salam', 'Салам')">
+              Текшерүү
+            </button>
+            <div id="audioResult" class="result-message"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Кыргыз тили - Интерактивдик окуу платформасы</p>
+      <p>Дипломдук иш</p>
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>О сайте</h2>
+          <p>Сайт создан Тологоном Умаровым, 2025 год.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

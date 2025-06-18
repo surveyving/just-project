@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сөздөр жана сүйлөмдөр - Сабак</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #c0392b;
+            --accent-color: #ffd700;
+            --text-color: #2c3e50;
+            --light-bg: #fff5f5;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        .back-button::before {
+            content: '←';
+            margin-right: 0.5rem;
+        }
+
+        .lesson-progress {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .category-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .category-title {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-title button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .category-title button:hover {
+            transform: rotate(180deg);
+        }
+
+        .word-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .word-card {
+            background-color: var(--light-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .word-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .word-card.active {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+        }
+
+        .word {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .translation {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .category {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 15px;
+        }
+
+        .examples {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            display: none;
+        }
+
+        .word-card:hover .examples {
+            display: block;
+        }
+
+        .exercise-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .exercise {
+            background-color: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .exercise h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .exercise input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .exercise input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .result-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .correct-answer {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .wrong-answer {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .practice-mode {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .practice-mode button {
+            margin: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .flashcard {
+            perspective: 1000px;
+            width: 300px;
+            height: 200px;
+            margin: 2rem auto;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flashcard:hover .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 1rem;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .flashcard-back {
+            background: white;
+            color: var(--primary-color);
+            transform: rotateY(180deg);
+            border: 2px solid var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .word-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-mode {
+                position: static;
+                margin-top: 2rem;
+            }
+
+            .flashcard {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Сөздөр жана сүйлөмдөр</h1>
+        <p>Күнүмдүк колдонуудагы сөздөр</p>
+    </header>
+
+    <div class="container">
+        <a href="../index.html" class="back-button">Башкы бетке кайтуу</a>
+
+        <div class="lesson-progress">
+            <h3>Сабактын прогресси</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">0% бүтүрүлдү</p>
+        </div>
+
+        <div class="category-section">
+            <div class="category-title">
+                <h2>Саламдашуу</h2>
+                <button onclick="toggleCategory('greetings')">▼</button>
+            </div>
+            <div class="word-grid" id="greetings">
+                <!-- Слова будут добавлены через JavaScript -->
+            </div>
+        </div>
+
+        <div class="category-section">
+            <div class="category-title">
+                <h2>Үй-бүлө</h2>
+                <button onclick="toggleCategory('family')">▼</button>
+            </div>
+            <div class="word-grid" id="family">
+                <!-- Слова будут добавлены через JavaScript -->
+            </div>
+        </div>
+
+        <div class="category-section">
+            <div class="category-title">
+                <h2>Тамак-аш</h2>
+                <button onclick="toggleCategory('food')">▼</button>
+            </div>
+            <div class="word-grid" id="food">
+                <!-- Слова будут добавлены через JavaScript -->
+            </div>
+        </div>
+
+        <div class="exercise-section">
+            <h2>Көнүгүүлөр</h2>
+            
+            <div class="exercise">
+                <h3>Сөздөрдү которуу</h3>
+                <p>Төмөнкү сөздөрдү кыргызчага которуңуз:</p>
+                <div class="exercise-item">
+                    <p>Доброе утро - <input type="text" id="exercise1" placeholder="Жообуңузду жазыңыз"></p>
+                    <button onclick="checkAnswer('exercise1', 'Кайырлуу таң')">Текшерүү</button>
+                    <div id="exercise1-result" class="result-message"></div>
+                </div>
+                <div class="exercise-item">
+                    <p>Отец - <input type="text" id="exercise2" placeholder="Жообуңузду жазыңыз"></p>
+                    <button onclick="checkAnswer('exercise2', 'Ата')">Текшерүү</button>
+                    <div id="exercise2-result" class="result-message"></div>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h3>Сүйлөмдөрдү жазуу</h3>
+                <p>Төмөнкү сүйлөмдөрдү кыргызча жазыңыз:</p>
+                <div class="exercise-item">
+                    <p>Как вас зовут? - <input type="text" id="exercise3" placeholder="Жообуңузду жазыңыз"></p>
+                    <button onclick="checkAnswer('exercise3', 'Сиздин атыңыз ким?')">Текшерүү</button>
+                    <div id="exercise3-result" class="result-message"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="practice-mode">
+            <h3>Көнүгүү режими</h3>
+            <div class="flashcard">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front" id="flashcardFront">
+                        Нажмите для начала
+                    </div>
+                    <div class="flashcard-back" id="flashcardBack">
+                        Нажмите для переворота
+                    </div>
+                </div>
+            </div>
+            <button onclick="nextFlashcard()">Кийинки сөз</button>
+            <button onclick="showHint()">Жардам</button>
+        </div>
+    </div>
+
+    <script>
+        // Данные слов
+        const words = {
+            greetings: [
+                { kyrgyz: 'Саламатсызбы', russian: 'Здравствуйте', examples: 'Саламатсызбы, кандайсыз?' },
+                { kyrgyz: 'Кайырлуу таң', russian: 'Доброе утро', examples: 'Кайырлуу таң, эртең менен!' },
+                { kyrgyz: 'Кайырлуу кеч', russian: 'Добрый вечер', examples: 'Кайырлуу кеч, жакшы кеч!' }
+            ],
+            family: [
+                { kyrgyz: 'Ата', russian: 'Отец', examples: 'Менин атам улуу' },
+                { kyrgyz: 'Апа', russian: 'Мать', examples: 'Менин апам сүйкүмдүү' },
+                { kyrgyz: 'Балдар', russian: 'Дети', examples: 'Балдар мектепте' }
+            ],
+            food: [
+                { kyrgyz: 'Бешбармак', russian: 'Бешбармак', examples: 'Бешбармак - улуттук тамак' },
+                { kyrgyz: 'Куурдак', russian: 'Жаркое', examples: 'Куурдак даамдуу тамак' },
+                { kyrgyz: 'Максым', russian: 'Максым', examples: 'Максым - сүттөн жасалган тамак' }
+            ]
+        };
+
+        // Заполнение категорий словами
+        function populateCategories() {
+            for (const category in words) {
+                const grid = document.getElementById(category);
+                words[category].forEach(word => {
+                    const card = document.createElement('div');
+                    card.className = 'word-card';
+                    card.innerHTML = `
+                        <div class="word">${word.kyrgyz}</div>
+                        <div class="translation">${word.russian}</div>
+                        <div class="category">${getCategoryName(category)}</div>
+                        <div class="examples">${word.examples}</div>
+                    `;
+                    card.addEventListener('click', () => toggleWord(card));
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // Получение названия категории
+        function getCategoryName(category) {
+            const names = {
+                greetings: 'Саламдашуу',
+                family: 'Үй-бүлө',
+                food: 'Тамак-аш'
+            };
+            return names[category];
+        }
+
+        // Переключение категории
+        function toggleCategory(categoryId) {
+            const grid = document.getElementById(categoryId);
+            const button = grid.previousElementSibling.querySelector('button');
+            if (grid.style.display === 'none') {
+                grid.style.display = 'grid';
+                button.textContent = '▼';
+            } else {
+                grid.style.display = 'none';
+                button.textContent = '▶';
+            }
+        }
+
+        // Переключение слова
+        function toggleWord(card) {
+            card.classList.toggle('active');
+            updateProgress(1);
+        }
+
+        // Обновление прогресса
+        let progress = 0;
+        function updateProgress(value) {
+            progress = Math.min(progress + value, 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = progress + '% бүтүрүлдү';
+            localStorage.setItem('wordsProgress', progress);
+        }
+
+        // Загрузка прогресса при загрузке страницы
+        window.onload = function() {
+            populateCategories();
+            const savedProgress = localStorage.getItem('wordsProgress');
+            if (savedProgress) {
+                progress = parseInt(savedProgress);
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('progressText').textContent = progress + '% бүтүрүлдү';
+            }
+        }
+
+        // Проверка ответов
+        function checkAnswer(exerciseId, correctAnswer) {
+            const input = document.getElementById(exerciseId);
+            const resultDiv = document.getElementById(exerciseId + '-result');
+            const userAnswer = input.value.trim();
+
+            resultDiv.style.display = 'block';
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                resultDiv.textContent = 'Туура! Азаматсыз!';
+                resultDiv.className = 'result-message correct-answer';
+                updateProgress(5);
+            } else {
+                resultDiv.textContent = 'Туура эмес. Кайра аракет кылыңыз.';
+                resultDiv.className = 'result-message wrong-answer';
+            }
+        }
+
+        // Работа с карточками
+        let currentFlashcard = null;
+        let currentCategory = null;
+
+        function nextFlashcard() {
+            const categories = Object.keys(words);
+            currentCategory = categories[Math.floor(Math.random() * categories.length)];
+            const categoryWords = words[currentCategory];
+            currentFlashcard = categoryWords[Math.floor(Math.random() * categoryWords.length)];
+            
+            document.getElementById('flashcardFront').textContent = currentFlashcard.kyrgyz;
+            document.getElementById('flashcardBack').textContent = currentFlashcard.russian;
+        }
+
+        function showHint() {
+            if (currentFlashcard) {
+                alert(`Жардам: ${currentFlashcard.examples}`);
+            } else {
+                alert('Алгач "Кийинки сөз" баскычын басыңыз');
+            }
+        }
+    </script>
+</body>
+</html> 
